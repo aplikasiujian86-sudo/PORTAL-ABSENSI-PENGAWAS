@@ -1,32 +1,584 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#075b45"><title>Portal Absensi Guru | Pondok & Madrasah</title>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b63">
+<title>Portal Absensi Pengawas</title>
+
 <style>
-:root{--green:#08634b;--deep:#064b3b;--mint:#e8f5ed;--gold:#d9ad54;--ink:#16372e;--muted:#6b7f77;--line:#dce9e1;--cream:#fbfaf4}*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f3f8f2,#fbfaf5);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink)}button,select,input{font:inherit}.shell{max-width:850px;margin:auto;padding:14px 14px 40px}.top{display:flex;align-items:center;gap:12px;padding:9px 3px 16px}.brandmark{width:46px;height:46px;border-radius:15px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:25px;box-shadow:0 6px 18px #075b452b}.brand strong{display:block;font-size:16px}.brand small{color:var(--muted)}.date{margin-left:auto;font-size:12px;color:var(--muted);text-align:right}.hero{overflow:hidden;position:relative;border-radius:25px;background:#e6efe4;min-height:215px;box-shadow:0 12px 28px #173e2b12}.hero img{width:100%;height:250px;object-fit:cover;object-position:center 43%;display:block}.heroText{position:absolute;inset:0 auto 0 0;width:54%;padding:25px 22px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(90deg,#fffdf1f5 0%,#fffdf1d9 68%,transparent 100%)}.eyebrow{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--green);font-weight:800}.hero h1{font-family:Georgia,serif;font-size:clamp(21px,4vw,31px);line-height:1.15;margin:8px 0;color:#104b3b}.hero p{font-size:13px;line-height:1.5;margin:0;color:#50675c}.ornament{height:5px;background:linear-gradient(90deg,var(--green),#b4d2a9,var(--gold));border-radius:8px;margin:16px 0}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:19px;margin:14px 0;box-shadow:0 8px 24px #17432d0a}.step{display:inline-flex;align-items:center;gap:7px;color:var(--green);background:var(--mint);padding:6px 10px;border-radius:30px;font-size:11px;font-weight:800}.panel h2{font-size:19px;margin:12px 0 5px}.muted{color:var(--muted);font-size:13px;line-height:1.5}.field{margin:17px 0}.field label{display:block;font-size:13px;font-weight:750;margin:0 0 8px}.field select{width:100%;height:50px;border:1px solid #cbded2;border-radius:13px;background:#fff;padding:0 13px;color:var(--ink)}.btn{border:0;border-radius:13px;padding:14px 18px;background:linear-gradient(135deg,#087b58,#07543f);color:white;font-weight:800;cursor:pointer;box-shadow:0 7px 15px #075b4523}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.secondary{background:#eef5ef;color:var(--green);box-shadow:none;border:1px solid var(--line)}.btn.gold{background:linear-gradient(135deg,#d8b45f,#b98b31);color:#30240b}.full{width:100%}.schedule{border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;background:linear-gradient(120deg,#fff,#f8fcf8)}.scheduleHead{display:flex;gap:12px;align-items:flex-start}.book{width:42px;height:42px;flex:none;border-radius:13px;background:#e4f2e9;color:var(--green);display:grid;place-items:center;font-size:21px}.schedule h3{font-size:15px;margin:2px 0 5px}.schedule p{font-size:12px;color:var(--muted);margin:0;line-height:1.55}.schedule .btn{margin-top:13px;width:100%;padding:12px}.tag{display:inline-block;font-size:10px;font-weight:800;border-radius:20px;padding:5px 8px;background:#f7f0dc;color:#87621b;margin-top:8px}.notice{border-radius:13px;padding:12px 14px;margin:12px 0;background:#fff6df;color:#795617;font-size:13px}.notice.error{background:#fff0ef;color:#a33129}.notice.success{background:#eaf7ee;color:#17613e}.scanbox{background:#102c24;border-radius:18px;overflow:hidden;position:relative}.scanbox video{width:100%;display:block;max-height:340px;object-fit:cover}.scanOverlay{position:absolute;inset:0;pointer-events:none;display:grid;place-items:center}.scanFrame{width:min(66vw,245px);height:min(66vw,245px);border:3px solid #79e29a;border-radius:22px;box-shadow:0 0 0 100vmax #001b1480}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{padding:18px 12px;border:1px solid var(--line);border-radius:16px;background:#fff;text-align:center;cursor:pointer}.choice.active{border:2px solid var(--green);background:#f0f8f1}.choice .ico{font-size:27px}.choice b{display:block;margin:7px 0 4px}.choice small{color:var(--muted);font-size:11px}.student{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #edf2ed}.student:last-child{border-bottom:0}.student b{font-size:13px}.student small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.student select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px;background:white}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:13px 0}.stat{background:#f2f8f2;border-radius:12px;padding:10px;text-align:center}.stat b{display:block;font-size:19px;color:var(--green)}.stat small{font-size:10px;color:var(--muted)}.footer{text-align:center;color:#87958d;font-size:11px;padding:15px}.hide{display:none!important}@media(max-width:540px){.shell{padding:10px 11px 28px}.hero{min-height:185px}.hero img{height:205px;object-position:58% center}.heroText{width:66%;padding:17px 14px}.hero p{font-size:11px}.panel{padding:16px}.student{grid-template-columns:1fr 120px}.date{font-size:10px}}
-</style></head><body><main class="shell">
-<header class="top"><div class="brandmark">☪</div><div class="brand"><strong>Portal Absensi Guru</strong><small>Pondok & Madrasah</small></div><div class="date" id="dateNow">Absensi Hari Ini</div></header>
-<section class="hero"><img src="/santri-hero.png" alt="Santri di lingkungan pondok pesantren"><div class="heroText"><div class="eyebrow">Pondok & Madrasah</div><h1>Assalamu’alaikum,<br>Warahmatullahi Wabarakatuh</h1><p>Mengabdi dengan amanah, mendidik dengan sepenuh hati.</p></div></section><div class="ornament"></div>
-<div id="message" aria-live="polite"></div><div id="app"><section class="panel"><span class="step">LANGKAH 1 · IDENTITAS GURU</span><h2>Selamat datang, Bapak/Ibu Guru</h2><p class="muted">Silakan pilih nama Anda untuk melihat jadwal pengawasan hari ini.</p><div class="field"><label for="teacher">Nama Guru</label><select id="teacher"><option value="">Memuat daftar guru…</option></select></div><button class="btn full" id="continueBtn" disabled onclick="chooseTeacher()">Lihat Jadwal Saya →</button></section></div>
-<footer class="footer">Portal Absensi Guru · Amanah dalam bertugas · Barokah dalam mendidik</footer></main>
+:root {
+  font-family: Arial, sans-serif;
+  color: #172b4d;
+  background: #f2f5f9;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 14px; }
+.wrap { max-width: 760px; margin: auto; }
+.card {
+  background: white;
+  padding: 18px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 14px #00000008;
+}
+h1 { font-size: 22px; margin: 0 0 6px; }
+h2 { font-size: 18px; margin: 0 0 12px; }
+p { line-height: 1.5; }
+.muted { color: #667085; font-size: 13px; line-height: 1.5; }
+label { display: block; font-weight: bold; margin: 12px 0 6px; }
+select, button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 9px;
+  font-size: 15px;
+}
+select {
+  border: 1px solid #cbd5e1;
+  background: white;
+}
+button {
+  border: 0;
+  background: #155eef;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:disabled { opacity: .5; }
+.secondary { background: #e9eef5; color: #344054; }
+.danger { background: #d92d20; }
+.success { background: #ecfdf3; color: #027a48; }
+.notice {
+  padding: 12px;
+  border-radius: 9px;
+  background: #fff7e6;
+  color: #8a4b08;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.notice.error { background: #fff0f0; color: #b42318; }
+.notice.success { background: #ecfdf3; color: #027a48; }
+.schedule {
+  border: 1px solid #dce3ec;
+  border-radius: 11px;
+  padding: 14px;
+  margin: 10px 0;
+}
+.schedule h3 { margin: 0 0 7px; font-size: 17px; }
+.schedule p { margin: 5px 0; font-size: 13px; }
+.toolbar { display: flex; gap: 8px; margin-top: 12px; }
+.toolbar button { flex: 1; }
+#scanPanel { display: none; }
+#scanner {
+  width: 100%;
+  background: #101828;
+  border-radius: 12px;
+  max-height: 55vh;
+}
+.student {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eaecf0;
+}
+.student-name { font-size: 14px; font-weight: bold; }
+.student select { width: 135px; padding: 9px; }
+.badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #e8f2ff;
+  color: #175cd3;
+  font-size: 12px;
+}
+.hidden { display: none !important; }
+@media(max-width:480px) {
+  body { padding: 8px; }
+  .card { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <section class="card">
+    <h1>Portal Absensi Pengawas</h1>
+    <div class="muted" id="subtitle">Memuat portal...</div>
+    <div id="message"></div>
+  </section>
+
+  <main id="app">
+    <section class="card">Memuat data...</section>
+  </main>
+
+</div>
+
 <script>
-const API='/.netlify/functions/api';let baseData=null,teacherId='',assignments=[],selected=null,verified=null,mode='MENGAWAS',stream=null,scanTimer=null;
-const $=id=>document.getElementById(id);function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function msg(t,type=''){ $('message').innerHTML=t?`<div class="notice ${type}">${esc(t)}</div>`:''; }
-async function api(action,payload={}){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,payload,qrKey:payload.qrKey||''})});const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||'Permintaan tidak berhasil.');return j;}
-async function init(){try{const d=await api('portal_start');baseData=d;$('dateNow').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});$('teacher').innerHTML='<option value="">— Pilih nama Anda —</option>'+d.teachers.map(t=>`<option value="${esc(t.id)}">${esc(t.nama)}</option>`).join('');$('continueBtn').disabled=false;}catch(e){msg(e.message,'error');$('teacher').innerHTML='<option value="">Daftar guru belum tersedia</option>';}}
-async function chooseTeacher(){teacherId=$('teacher').value;if(!teacherId){msg('Silakan pilih nama Anda terlebih dahulu.','error');return;}try{const d=await api('portal_start',{teacherId});assignments=d.assignments||[];renderSchedules();msg('');}catch(e){msg(e.message,'error');}}
-function renderSchedules(){const t=baseData.teachers.find(x=>x.id===teacherId);$('app').innerHTML=`<section class="panel"><span class="step">LANGKAH 2 · JADWAL PENGAWASAN</span><h2>Assalamu’alaikum, ${esc(t?.nama||'')}</h2><p class="muted">Berikut daftar mata pelajaran dan kelas yang menjadi tugas pengawasan Anda hari ini.</p>${assignments.length?assignments.map((s,i)=>`<article class="schedule"><div class="scheduleHead"><div class="book">▤</div><div style="flex:1"><h3>${esc(s.mapel)} · ${esc(s.kelas)}</h3><p>${esc(s.jenjang)} · ${s.type==='pondok'?'Ujian Pondok':'Ujian Madrasah'}<br>Waktu: ${esc(s.time)} · Tanggal: ${esc(s.date)}</p><span class="tag">${s.locked?'SUDAH DIISI':'MENUNGGU ABSENSI'}</span></div></div><button class="btn ${s.locked?'secondary':''}" ${s.locked?'disabled':''} onclick="selectSchedule(${i})">${s.locked?'Absensi Selesai':'Pilih Jadwal & Scan Barcode →'}</button></article>`).join(''):'<div class="notice">Tidak ada jadwal pengawasan yang ditetapkan untuk Anda hari ini.</div>'}<button class="btn secondary full" onclick="location.reload()">Ganti Nama Guru</button></section>`;}
-function selectSchedule(i){selected=assignments[i];renderScanner();}
-function renderScanner(){ $('app').innerHTML=`<section class="panel"><span class="step">LANGKAH 3 · VERIFIKASI KELAS</span><h2>Scan Barcode Kelas</h2><p class="muted">Arahkan kamera ke QR/barcode yang terpasang di ruang kelas sesuai jadwal yang Anda pilih.</p><div class="schedule"><b>${esc(selected.mapel)} · ${esc(selected.kelas)}</b><p>${esc(selected.time)} · ${esc(selected.date)}</p></div><div class="scanbox"><video id="video" autoplay muted playsinline></video><div class="scanOverlay"><div class="scanFrame"></div></div></div><p class="muted">Pastikan pencahayaan cukup dan seluruh QR terlihat di dalam kotak.</p><div id="scanStatus" class="notice">Menyiapkan kamera…</div><button class="btn secondary full" onclick="stopScanner();renderSchedules()">← Kembali ke Jadwal</button></section>`;startScanner();}
-async function startScanner(){try{if(!('BarcodeDetector'in window))throw new Error('Pemindai QR bawaan tidak didukung browser ini. Gunakan Chrome terbaru.');const detector=new BarcodeDetector({formats:['qr_code']});stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});const v=$('video');v.srcObject=stream;await v.play();$('scanStatus').textContent='Kamera aktif. Arahkan ke QR kelas.';const scan=async()=>{if(!stream)return;try{const codes=await detector.detect(v);if(codes.length&&codes[0].rawValue){stopScanner();await verifyQr(codes[0].rawValue);return;}}catch(e){}scanTimer=setTimeout(scan,350);};scan();}catch(e){$('scanStatus').className='notice error';$('scanStatus').textContent=e.message||'Tidak dapat membuka kamera. Izinkan akses kamera pada browser.';}}
-function stopScanner(){if(scanTimer)clearTimeout(scanTimer);scanTimer=null;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}}
-function extractToken(raw){try{const u=new URL(raw);return u.searchParams.get('qr')||raw.trim();}catch(e){return String(raw||'').trim();}}
-async function verifyQr(raw){try{const qrKey=extractToken(raw);const d=await api('portal_verify_qr',{qrKey,teacherId,date:selected.date,assignmentId:selected.id});verified=d;renderAttendance();msg('QR kelas berhasil diverifikasi.','success');}catch(e){renderScanner();$('scanStatus').className='notice error';$('scanStatus').textContent=e.message;}}
-function renderAttendance(){const t=baseData.teachers.find(x=>x.id===teacherId);$('app').innerHTML=`<section class="panel"><span class="step">LANGKAH 4 · KONFIRMASI TUGAS</span><div class="notice success">✓ QR Kelas Valid · ${esc(verified.kelas.jenjang)} ${esc(verified.kelas.nama)}</div><h2>Pilih Jenis Penugasan</h2><p class="muted">Jadwal: ${esc(selected.mapel)} · ${esc(selected.kelas)}</p><div class="two"><button class="choice active" id="choiceMain" onclick="setMode('MENGAWAS')"><div class="ico">✓</div><b>Mengawas</b><small>Menjalankan tugas sesuai jadwal</small></button><button class="choice" id="choiceSub" onclick="setMode('MENGGANTIKAN')"><div class="ico">⇄</div><b>Menggantikan</b><small>Menggantikan pengawas lain</small></button></div><div id="replacementBox" class="field hide"><label>Nama guru pengganti</label><select id="replacement"><option value="">— Pilih guru yang digantikan —</option>${verified.teachers.filter(x=>x.id!==teacherId).map(x=>`<option value="${esc(x.id)}">${esc(x.nama)}</option>`).join('')}</select></div><div class="ornament"></div><h2>Absensi Siswa</h2><p class="muted">Kelas ${esc(verified.kelas.nama)} · ${verified.students.length} siswa. Atur status setiap siswa.</p><div class="stats"><div class="stat"><b>${verified.students.length}</b><small>Jumlah Siswa</small></div><div class="stat"><b id="presentCount">${verified.students.length}</b><small>Hadir</small></div><div class="stat"><b id="absentCount">0</b><small>Tidak Hadir</small></div></div><div id="studentList">${verified.students.map((s,i)=>`<div class="student"><div><b>${i+1}. ${esc(s.nama)}</b><small>${esc(s.nomorUjian||s.nis||'')}</small></div><select data-student="${esc(s.id)}" onchange="countStudents()"><option value="HADIR">Hadir</option><option value="TIDAK HADIR">Tidak Hadir</option></select></div>`).join('')}</div><div class="ornament"></div><button class="btn full" onclick="submitAttendance()">Simpan Absensi →</button><button class="btn secondary full" style="margin-top:9px" onclick="renderScanner()">Scan Ulang</button></section>`;}
-function setMode(v){mode=v;$('choiceMain').classList.toggle('active',v==='MENGAWAS');$('choiceSub').classList.toggle('active',v==='MENGGANTIKAN');$('replacementBox').classList.toggle('hide',v!=='MENGGANTIKAN');}
-function countStudents(){const sels=[...document.querySelectorAll('[data-student]')],abs=sels.filter(s=>s.value==='TIDAK HADIR').length;$('presentCount').textContent=sels.length-abs;$('absentCount').textContent=abs;}
-async function submitAttendance(){const replacement=$('replacement')?.value||'';if(mode==='MENGGANTIKAN'&&!replacement){msg('Pilih nama guru yang digantikan.','error');return;}const students=[...document.querySelectorAll('[data-student]')].map(s=>({studentId:s.dataset.student,status:s.value}));if(students.length!==verified.students.length){msg('Data absensi siswa belum lengkap.','error');return;}if(!confirm('Simpan absensi untuk '+selected.kelas+'?'))return;try{const r=await api('portal_submit',{qrKey:extractTokenFromVerified(),date:selected.date,assignmentId:selected.id,teacherId,mode,replacementTeacherId:mode==='MENGGANTIKAN'?replacement:'',replacedTeacherId:mode==='MENGGANTIKAN'?teacherId:'',students});$('app').innerHTML=`<section class="panel" style="text-align:center;padding:32px 20px"><div style="font-size:60px;color:#16835a">✓</div><span class="step">ABSENSI TERSIMPAN</span><h2>Alhamdulillah, Berhasil!</h2><p class="muted">Terima kasih, ${esc(baseData.teachers.find(x=>x.id===teacherId)?.nama||'Bapak/Ibu Guru')}. Absensi telah dicatat pada sistem.</p><div class="notice success" style="text-align:left">Mata Pelajaran: ${esc(selected.mapel)}<br>Kelas: ${esc(selected.kelas)}<br>Tanggal: ${esc(selected.date)}<br>Hadir: ${students.filter(x=>x.status==='HADIR').length} · Tidak Hadir: ${students.filter(x=>x.status==='TIDAK HADIR').length}</div><button class="btn full" onclick="location.reload()">Kembali ke Beranda</button></section>`;msg('');}catch(e){msg(e.message,'error');}}
-let verifiedQrToken='';function extractTokenFromVerified(){return verifiedQrToken;} 
-// Cache QR from the camera verification payload before moving to the attendance form.
-const _verifyQr=verifyQr;verifyQr=async function(raw){verifiedQrToken=extractToken(raw);return _verifyQr(raw);};
+const API = '/.netlify/functions/api';
+
+let teachers = [];
+let selectedTeacher = '';
+let selectedSchedule = null;
+let portalInfo = null;
+let qrValue = '';
+let cameraStream = null;
+let scanFrame = 0;
+let scanBusy = false;
+
+const $ = id => document.getElementById(id);
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function message(text, type = '') {
+  $('message').innerHTML = text
+    ? `<div class="notice ${type}">${esc(text)}</div>`
+    : '';
+}
+
+async function callServer(action, extra = {}) {
+  const response = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, ...extra })
+  });
+
+  let data;
+
+  try {
+    data = await response.json();
+  } catch (e) {
+    throw new Error('Respons server tidak dapat dibaca.');
+  }
+
+  if (!response.ok || !data || data.ok !== true) {
+    throw new Error(data && data.error
+      ? data.error
+      : 'Permintaan ke server gagal.');
+  }
+
+  return data;
+}
+
+// LANGKAH AWAL: AMBIL DAFTAR GURU
+async function init() {
+  try {
+    const data = await callServer('portal_teachers');
+    teachers = data.teachers || [];
+
+    $('subtitle').textContent =
+      'Silakan pilih nama guru untuk melihat jadwal pengawasan.';
+
+    renderTeacher();
+  } catch (e) {
+    message(e.message, 'error');
+    $('app').innerHTML = '';
+  }
+}
+
+// TAMPILKAN PILIHAN GURU
+function renderTeacher() {
+  stopScanner();
+
+  $('app').innerHTML = `
+    <section class="card">
+      <h2>1. Pilih Nama Guru</h2>
+      <p class="muted">
+        Pilih nama sesuai data guru yang terdaftar.
+      </p>
+
+      <label>Nama Guru</label>
+      <select id="teacherSelect" onchange="selectTeacher(this.value)">
+        <option value="">-- Pilih Nama Guru --</option>
+        ${teachers.map(t => `
+          <option value="${esc(t.id)}">
+            ${esc(t.nama)}
+          </option>
+        `).join('')}
+      </select>
+    </section>
+
+    <section class="card" id="schedulePanel">
+      <h2>2. Pilih Jadwal Pengawasan</h2>
+      <div class="muted">
+        Jadwal guru akan ditampilkan setelah nama dipilih.
+      </div>
+      <div id="scheduleList"></div>
+    </section>
+
+    <section class="card" id="scanPanel">
+      <h2>3. Scan QR Kelas</h2>
+      <p class="muted" id="scanText">
+        Arahkan kamera ke QR kelas yang telah disiapkan Admin.
+      </p>
+      <video id="scanner" playsinline muted></video>
+      <div class="toolbar">
+        <button class="secondary" onclick="cancelScan()">Batal</button>
+      </div>
+    </section>
+  `;
+
+  message('');
+}
+
+// AMBIL JADWAL GURU
+async function selectTeacher(id) {
+  selectedTeacher = String(id || '');
+  selectedSchedule = null;
+  portalInfo = null;
+  qrValue = '';
+
+  stopScanner();
+
+  if (!selectedTeacher) {
+    $('scheduleList').innerHTML = '';
+    return;
+  }
+
+  $('scheduleList').innerHTML =
+    '<p class="muted">Mengambil jadwal guru...</p>';
+
+  try {
+    const data = await callServer('portal_teacher_classes', {
+      teacherId: selectedTeacher
+    });
+
+    const schedules = data.schedules || [];
+
+    if (!schedules.length) {
+      $('scheduleList').innerHTML =
+        '<div class="notice">Tidak ada jadwal pengawasan untuk guru ini hari ini.</div>';
+      return;
+    }
+
+    $('scheduleList').innerHTML = schedules.map((s, i) => `
+      <div class="schedule">
+        <h3>${esc(s.kelas || 'Kelas')} ${esc(s.jenjang || '')}</h3>
+        <p><b>Waktu:</b> ${esc(s.time || '-')}</p>
+        <p><b>Mata pelajaran:</b> ${esc(s.mapel || '-')}</p>
+        <p><b>Jenis:</b> ${esc(s.type || '-')}</p>
+        ${s.locked
+          ? '<span class="badge">Sudah selesai</span>'
+          : `<button onclick="chooseSchedule(${i})">Pilih Jadwal dan Scan QR</button>`
+        }
+      </div>
+    `).join('');
+
+    window.currentSchedules = schedules;
+
+  } catch (e) {
+    $('scheduleList').innerHTML = '';
+    message(e.message, 'error');
+  }
+}
+
+// PILIH SATU JADWAL
+function chooseSchedule(index) {
+  const schedules = window.currentSchedules || [];
+  selectedSchedule = schedules[index];
+
+  if (!selectedSchedule) {
+    message('Jadwal tidak ditemukan.', 'error');
+    return;
+  }
+
+  $('scanPanel').style.display = 'block';
+  $('scanText').textContent =
+    'Scan QR kelas ' + selectedSchedule.kelas +
+    '. Pastikan QR sesuai dengan kelas yang dipilih.';
+
+  $('scanPanel').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+
+  startScanner();
+}
+
+// MULAI KAMERA
+async function startScanner() {
+  stopScanner();
+
+  if (!('BarcodeDetector' in window)) {
+    message(
+      'Pemindai QR belum didukung browser ini. Gunakan Google Chrome terbaru.',
+      'error'
+    );
+    return;
+  }
+
+  try {
+    const video = $('scanner');
+    const detector = new BarcodeDetector({
+      formats: ['qr_code']
+    });
+
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: { ideal: 'environment' } }
+    });
+
+    video.srcObject = cameraStream;
+    await video.play();
+
+    scanBusy = false;
+    const thisFrame = ++scanFrame;
+
+    async function scan() {
+      if (thisFrame !== scanFrame || !cameraStream || scanBusy) return;
+
+      try {
+        const codes = await detector.detect(video);
+
+        if (codes.length && codes[0].rawValue) {
+          scanBusy = true;
+          await verifyQR(codes[0].rawValue);
+          return;
+        }
+      } catch (e) {}
+
+      if (thisFrame === scanFrame) {
+        requestAnimationFrame(scan);
+      }
+    }
+
+    requestAnimationFrame(scan);
+    message('Kamera aktif. Silakan arahkan ke QR kelas.');
+
+  } catch (e) {
+    stopScanner();
+    message(
+      'Kamera tidak dapat dibuka. Izinkan akses kamera pada browser.',
+      'error'
+    );
+  }
+}
+
+function qrToken(value) {
+  const raw = String(value || '').trim();
+
+  try {
+    const url = new URL(raw);
+    return url.searchParams.get('qr') ||
+           url.searchParams.get('token') ||
+           raw;
+  } catch (e) {
+    return raw;
+  }
+}
+
+// PERIKSA QR KE SERVER
+async function verifyQR(value) {
+  stopScanner();
+  message('QR terbaca. Memeriksa kecocokan kelas...');
+
+  try {
+    qrValue = qrToken(value);
+
+    const data = await callServer('portal_info', {
+      qrKey: qrValue,
+      teacherId: selectedTeacher,
+      assignmentId: selectedSchedule.id
+    });
+
+    portalInfo = data;
+    renderAttendance();
+
+  } catch (e) {
+    message(e.message, 'error');
+
+    $('scanPanel').style.display = 'block';
+    startScanner();
+  }
+}
+
+// TAMPILKAN PILIHAN MENGAWAS / MENGGANTIKAN
+function renderAttendance() {
+  const students = portalInfo.students || [];
+  const otherTeachers = (portalInfo.teachers || [])
+    .filter(t => String(t.id) !== selectedTeacher);
+
+  $('app').innerHTML = `
+    <section class="card">
+      <h2>4. Konfirmasi Pengawasan</h2>
+
+      <div class="notice success">
+        QR kelas berhasil diverifikasi.
+      </div>
+
+      <p><b>Guru:</b> ${esc(
+        teachers.find(t => String(t.id) === selectedTeacher)?.nama || ''
+      )}</p>
+
+      <p><b>Kelas:</b> ${esc(portalInfo.kelas.nama || '')}</p>
+      <p><b>Jadwal:</b> ${esc(portalInfo.slot.mapel || '')}</p>
+      <p><b>Waktu:</b> ${esc(portalInfo.slot.time || '')}</p>
+
+      <label>Jenis Pengawasan</label>
+      <select id="mode" onchange="changeMode()">
+        <option value="">-- Pilih --</option>
+        <option value="MENGAWAS">Mengawas</option>
+        <option value="MENGGANTIKAN">Menggantikan</option>
+      </select>
+
+      <div id="replacementBox" class="hidden">
+        <label>Guru yang Digantikan</label>
+        <select id="replacementTeacher">
+          <option value="">-- Pilih Guru --</option>
+          ${otherTeachers.map(t => `
+            <option value="${esc(t.id)}">${esc(t.nama)}</option>
+          `).join('')}
+        </select>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Absensi Siswa</h2>
+      <p class="muted">
+        Periksa kehadiran setiap siswa. Semua siswa wajib memiliki status.
+      </p>
+
+      <div id="studentList">
+        ${students.length ? students.map((s, i) => `
+          <div class="student">
+            <div>
+              <div class="student-name">${i + 1}. ${esc(s.nama)}</div>
+              <div class="muted">${esc(s.nis || s.nomorUjian || '')}</div>
+            </div>
+            <select data-student="${esc(s.id)}">
+              <option value="HADIR">Hadir</option>
+              <option value="TIDAK HADIR">Tidak Hadir</option>
+            </select>
+          </div>
+        `).join('') : '<div class="notice">Tidak ada data siswa pada kelas ini.</div>'}
+      </div>
+
+      <div class="toolbar">
+        <button onclick="submitAttendance()">Kirim Absensi</button>
+      </div>
+    </section>
+  `;
+
+  message('');
+}
+
+function changeMode() {
+  const mode = $('mode').value;
+  $('replacementBox').classList.toggle(
+    'hidden',
+    mode !== 'MENGGANTIKAN'
+  );
+}
+
+// KIRIM ABSENSI KE GOOGLE APPS SCRIPT
+async function submitAttendance() {
+  const mode = $('mode').value;
+
+  if (!mode) {
+    message('Pilih Mengawas atau Menggantikan.', 'error');
+    return;
+  }
+
+  let replacementTeacherId = '';
+
+  if (mode === 'MENGGANTIKAN') {
+    replacementTeacherId = $('replacementTeacher').value;
+
+    if (!replacementTeacherId) {
+      message('Pilih guru yang digantikan.', 'error');
+      return;
+    }
+  }
+
+  const marks = [...document.querySelectorAll('[data-student]')].map(el => ({
+    studentId: el.dataset.student,
+    status: el.value
+  }));
+
+  if (marks.length !== (portalInfo.students || []).length) {
+    message('Daftar kehadiran siswa belum lengkap.', 'error');
+    return;
+  }
+
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach(b => b.disabled = true);
+  message('Menyimpan absensi...');
+
+  try {
+    const result = await callServer('portal_submit', {
+      payload: {
+        date: portalInfo.today,
+        teacherId: selectedTeacher,
+        assignmentId: selectedSchedule.id,
+        qrKey: qrValue,
+        mode,
+        replacementTeacherId,
+        students: marks
+      }
+    });
+
+    $('app').innerHTML = `
+      <section class="card">
+        <h2>Absensi Berhasil Disimpan</h2>
+
+        <div class="notice success">
+          ${esc(result.message || 'Absensi berhasil disimpan.')}
+        </div>
+
+        <p>Nama guru: <b>${esc(
+          teachers.find(t => String(t.id) === selectedTeacher)?.nama || ''
+        )}</b></p>
+
+        <p>Kelas: <b>${esc(portalInfo.kelas.nama || '')}</b></p>
+        <p>Mata pelajaran: <b>${esc(portalInfo.slot.mapel || '')}</b></p>
+        <p>Jumlah siswa: <b>${marks.length}</b></p>
+
+        <button onclick="location.reload()">Kembali ke Awal</button>
+      </section>
+    `;
+
+    message('');
+
+  } catch (e) {
+    buttons.forEach(b => b.disabled = false);
+    message(e.message, 'error');
+  }
+}
+
+function cancelScan() {
+  stopScanner();
+  $('scanPanel').style.display = 'none';
+  message('');
+}
+
+function stopScanner() {
+  scanFrame++;
+
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+
+  const video = $('scanner');
+  if (video) video.srcObject = null;
+
+  scanBusy = false;
+}
+
+window.addEventListener('pagehide', stopScanner);
+
 init();
-</script></body></html>
+</script>
+</body>
+</html>
