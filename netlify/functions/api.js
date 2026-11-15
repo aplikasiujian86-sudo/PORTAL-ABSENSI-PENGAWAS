@@ -1,109 +1,124 @@
-const GAS_URL = process.env.GAS_WEB_APP_URL;
+// NETLIFY FUNCTION
+// JEMBATAN API PORTAL ABSENSI PENGAWAS
+// Terhubung ke Google Apps Script
 
-const ALLOWED_ACTIONS = [
-  "portal_info",
-  "portal_submit",
-  "portal_admin_data",
-  "portal_admin_save",
-  "portal_admin_reset",
-  "portal_teacher_classes",
-  "portal_teacher_submit"
-];
+const ALLOWED_ACTIONS = new Set([
+  'portal_teachers',
+  'portal_teacher_classes',
+  'portal_info',
+  'portal_submit',
+  'portal_teacher_submit',
+  'portal_admin_data',
+  'portal_admin_save',
+  'portal_admin_reset'
+]);
 
-exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json; charset=utf-8"
+function jsonResponse(statusCode, data) {
+  return {
+    statusCode: statusCode,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+      'Vary': 'Origin'
+    },
+    body: JSON.stringify(data)
   };
+}
 
-  // Mengizinkan pemeriksaan CORS dari browser
-  if (event.httpMethod === "OPTIONS") {
+exports.handler = async function (event) {
+
+  // IZINKAN PREFLIGHT REQUEST
+  if (event.httpMethod === 'OPTIONS') {
     return {
-      statusCode: 200,
-      headers,
-      body: ""
+      statusCode: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '86400',
+        'Vary': 'Origin'
+      },
+      body: ''
     };
   }
 
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({
-        ok: false,
-        error: "Metode tidak diizinkan."
-      })
-    };
+  // HANYA MENERIMA POST
+  if (event.httpMethod !== 'POST') {
+    return jsonResponse(405, {
+      ok: false,
+      error: 'Metode tidak diizinkan.'
+    });
   }
 
-  if (!GAS_URL) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        ok: false,
-        error: "GAS_WEB_APP_URL belum diatur di Netlify."
-      })
-    };
+  // AMBIL URL GOOGLE APPS SCRIPT
+  const gasUrl = process.env.GAS_WEB_APP_URL;
+
+  if (!gasUrl) {
+    return jsonResponse(500, {
+      ok: false,
+      error: 'GAS_WEB_APP_URL belum diatur pada Environment Variables Netlify.'
+    });
   }
+
+  // BACA DATA PERMINTAAN
+  let input;
 
   try {
-    const body = event.isBase64Encoded
-      ? Buffer.from(event.body || "", "base64").toString("utf8")
-      : (event.body || "{}");
+    input = JSON.parse(event.body || '{}');
+  } catch (err) {
+    return jsonResponse(400, {
+      ok: false,
+      error: 'Format permintaan tidak valid.'
+    });
+  }
 
-    const data = JSON.parse(body);
+  // PERIKSA NAMA AKSI
+  if (!input || !ALLOWED_ACTIONS.has(input.action)) {
+    return jsonResponse(400, {
+      ok: false,
+      error: 'Aksi tidak dikenal atau tidak diizinkan: ' +
+        (input && input.action ? input.action : 'kosong')
+    });
+  }
 
-    if (!data.action || !ALLOWED_ACTIONS.includes(data.action)) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          ok: false,
-          error: "Aksi tidak dikenal atau tidak diizinkan."
-        })
-      };
-    }
+  // KIRIM PERMINTAAN KE GOOGLE APPS SCRIPT
+  try {
 
-    const response = await fetch(GAS_URL, {
-      method: "POST",
+    const response = await fetch(gasUrl, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'text/plain;charset=utf-8'
       },
-      body: JSON.stringify(data),
-      redirect: "follow"
+      body: JSON.stringify(input),
+      redirect: 'follow'
     });
 
-    const resultText = await response.text();
+    const raw = await response.text();
 
-    let result;
+    let data;
+
     try {
-      result = JSON.parse(resultText);
-    } catch (e) {
-      result = {
+      data = JSON.parse(raw);
+    } catch (err) {
+      return jsonResponse(502, {
         ok: false,
-        error: "Respons Apps Script bukan JSON.",
-        detail: resultText.substring(0, 500)
-      };
+        error: 'Respons Apps Script bukan JSON. Periksa URL dan akses Web App.'
+      });
     }
 
-    return {
-      statusCode: response.ok ? 200 : response.status,
-      headers,
-      body: JSON.stringify(result)
-    };
+    return jsonResponse(response.ok ? 200 : 502, data);
 
-  } catch (error) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        ok: false,
-        error: "Gagal menghubungi server.",
-        detail: error.message
-      })
-    };
+  } catch (err) {
+
+    return jsonResponse(502, {
+      ok: false,
+      error: 'Gagal menghubungi Apps Script: ' +
+        (err && err.message ? err.message : String(err))
+    });
+
   }
 };
