@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absensi Pengawas</title>
+  <style>
+    :root{font-family:Arial,sans-serif;color:#1d2939;background:#f3f6fa}*{box-sizing:border-box}body{margin:0;padding:18px}.wrap{max-width:850px;margin:0 auto}.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px;margin:0 0 14px;box-shadow:0 4px 18px #172b4d0b}h1{font-size:22px;margin:0 0 5px}h2{font-size:17px;margin:0 0 12px}.muted{color:#667085;font-size:13px}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#e8f2ff;color:#175cd3;font-size:12px;font-weight:bold}.notice{padding:12px;border-radius:10px;background:#fff7e6;color:#8a4b08;margin:10px 0}.error{background:#fff0f0;color:#b42318}.success{background:#ecfdf3;color:#027a48}.field{display:block;margin:12px 0}.field label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}select,button{font:inherit}select{width:100%;padding:11px;border:1px solid #cfd8e3;border-radius:9px;background:white}button{border:0;border-radius:9px;padding:12px 16px;background:#155eef;color:white;font-weight:700;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#eef2f6;color:#344054}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.student{display:grid;grid-template-columns:1fr 190px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #eef1f5}.student:last-child{border:0}.student select{padding:8px}.empty{text-align:center;color:#667085;padding:22px}@media(max-width:560px){body{padding:10px}.student{grid-template-columns:1fr}.student select{max-width:none}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Absensi Pengawas Ujian</h1>
+    <div class="muted" id="schoolLabel">Memeriksa QR kelas…</div>
+    <div id="message"></div>
+  </div>
+  <div id="app"></div>
+</div>
+<script>
+const QR_KEY = new URLSearchParams(location.search).get('qr') || '';
+let portalData=null;
+function say(msg,type){const el=document.getElementById('message');el.innerHTML=msg?`<div class="notice ${type||''}">${msg}</div>`:'';}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const PORTAL_API='/.netlify/functions/api';
+async function callServer(action,payload){say('Memproses…');try{const res=await fetch(PORTAL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,payload,qrKey:payload&&payload.qrKey})});const r=await res.json();if(!res.ok||!r||!r.ok)throw new Error(r&&r.error||'Permintaan gagal.');say('');return r;}catch(e){say(esc(e.message||e),'error');throw e;}}
+async function load(){try{const r=await callServer('portal_info',{qrKey:QR_KEY});portalData=r;document.getElementById('schoolLabel').textContent=(r.school||'')+' • '+(r.kelas.jenjang||'')+' '+(r.kelas.nama||'')+' • '+r.today;render();}catch(e){document.getElementById('app').innerHTML='';}}
+function render(){const c=document.getElementById('app');if(!portalData.slots.length){c.innerHTML='<div class="card empty">Tidak ada jadwal pengawas yang ditetapkan untuk kelas ini hari ini.</div>';return;}
+ c.innerHTML=portalData.slots.map((s,i)=>`<section class="card"><div class="toolbar" style="justify-content:space-between;align-items:center;margin-top:0"><h2>${esc(s.type==='pondok'?'Ujian Pondok':'Ujian Madrasah')} • ${esc(s.time)}</h2><span class="pill">${s.locked?'SUKSES':'BELUM DIISI'}</span></div><p class="muted">Mata pelajaran: ${esc(s.mapel)}<br>Pengawas terjadwal: <b>${esc(s.assignedTeacher)}</b></p>${s.locked?'<div class="notice success">Absensi untuk jadwal ini sudah berhasil dikirim dan terkunci.</div>':slotForm(s,i)}</section>`).join('');}
+function slotForm(s,i){return `<form onsubmit="submitSlot(event,${i})"><div class="field"><label>Jenis tugas</label><select name="mode" required onchange="toggleReplacement(this,${i})"><option value="">Pilih tugas</option><option value="MENGAWAS">MENGAWAS (pengawas sesuai jadwal)</option><option value="MENGGANTIKAN">MENGGANTIKAN (guru pengganti)</option></select></div><div class="field" id="replacement-${i}" style="display:none"><label>Nama guru pengganti</label><select name="replacementTeacherId"><option value="">Pilih guru pengganti</option>${portalData.teachers.filter(t=>t.id!==s.assignedTeacherId).map(t=>`<option value="${esc(t.id)}">${esc(t.nama)}</option>`).join('')}</select></div><h2>Daftar Siswa ${esc(portalData.kelas.nama)}</h2><p class="muted">Pilih HADIR atau TIDAK HADIR untuk setiap siswa.</p>${portalData.students.length?portalData.students.map((st,j)=>`<div class="student"><div><b>${j+1}. ${esc(st.nama)}</b><div class="muted">${esc(st.nomorUjian||st.nis||'')}</div></div><select name="student-${esc(st.id)}" required><option value="HADIR">HADIR</option><option value="TIDAK HADIR">TIDAK HADIR</option></select></div>`).join(''):'<div class="notice">Tidak ada siswa yang terdaftar pada kelas ini.</div>'}<div class="toolbar"><button type="submit" ${!portalData.students.length?'disabled':''}>Kirim Absensi</button></div></form>`;}
+function toggleReplacement(el,i){const box=document.getElementById('replacement-'+i);box.style.display=el.value==='MENGGANTIKAN'?'':'none';const select=box.querySelector('select');select.required=el.value==='MENGGANTIKAN';}
+function submitSlot(ev,i){ev.preventDefault();const s=portalData.slots[i],form=ev.target,fd=new FormData(form),students=portalData.students.map(st=>({studentId:st.id,status:String(fd.get('student-'+st.id)||'')}));if(students.some(x=>!x.status)){say('Lengkapi status seluruh siswa.','error');return;}if(!confirm('Kirim absensi kelas ini? Setelah berhasil, data tidak dapat dikirim ulang kecuali Admin membuka kunci.'))return;const payload={qrKey:QR_KEY,date:portalData.today,assignmentId:s.id,mode:fd.get('mode'),replacementTeacherId:fd.get('replacementTeacherId')||'',students};callServer('portal_submit',payload).then(r=>{say(esc(r.message),'success');load();}).catch(()=>{});} 
+if(!QR_KEY){say('QR kelas tidak valid.','error');}else load();
+</script>
+</body>
+</html>
